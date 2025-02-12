@@ -1,5 +1,4 @@
 from sqlmodel import select,desc
-from app.db.db import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.schemas.role.role import RoleSchema,UpdateRoleSchema
 from app.models.roles.model import RoleModel

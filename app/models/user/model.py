@@ -1,7 +1,8 @@
 from sqlmodel import SQLModel,Field,Column
 import sqlalchemy.dialects.postgresql as pg
-from typing import Optional
+from typing import Optional,List
 import uuid
+from .status import StatusEnum
 from datetime import datetime
 
 class UserModel(SQLModel, table=True):
@@ -14,12 +15,13 @@ class UserModel(SQLModel, table=True):
             default=uuid.uuid4
         )
     )
-    role_uid : Optional[uuid.UUID] = Field(default=None,foreign_key="roles.uid")
+    role_uid : Optional[uuid.UUID] = Field(default="4f16863a-8932-46ba-9cb5-2bd9ff63bf19",foreign_key="roles.uid")
     first_name : str
     last_name : str
     email: str = Field(unique=True,nullable=False)
     hash_password:str
     is_verified: bool = Field(default=False)
+    status:str = Field(default=StatusEnum.ACTIVE,nullable=False)
     created_at: datetime = Field(
         sa_column=Column(
             pg.TIMESTAMP,
