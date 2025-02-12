@@ -67,6 +67,16 @@ class AccessTokenBearer(TokenBearer):
                 detail="Invalid token"
             )
             
+class RefreshTokenBearer(TokenBearer):
+    
+    def verify_token_data(self,token_data) -> None:
+        if not token_data["refresh"] and token_data["refresh"] is not None:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Invalid token"
+            )
+            
+            
 async def get_current_user(token_details: dict = Depends(AccessTokenBearer()), session:AsyncSession = Depends(get_session)):
     user_email = token_details["user"]["email"]
 
