@@ -32,7 +32,7 @@ class UserService:
         if user:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=self.USER_NOT_FOUND
+                detail="User is already exist."
             )
 
         new_user = await user_repository.create_user(user_data=user_data,session=session)
