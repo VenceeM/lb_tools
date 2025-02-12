@@ -6,10 +6,10 @@ from fastapi import HTTPException,status
 user_repository = UserRepository()
 
 class UserService:
-    
+   
     USER_NOT_FOUND = "User not found"
     
-    async def users(self, session:AsyncSession):
+    async def users(self,session:AsyncSession):
         users = await user_repository.get_users(session=session)
         
         return users
