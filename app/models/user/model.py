@@ -19,7 +19,7 @@ class UserModel(SQLModel, table=True):
     first_name : str
     last_name : str
     email: str = Field(unique=True,nullable=False)
-    hash_password:str
+    hash_password:str = Field(nullable=False,exclude=True)
     is_verified: bool = Field(default=False)
     status:str = Field(default=StatusEnum.ACTIVE,nullable=False)
     created_at: datetime = Field(

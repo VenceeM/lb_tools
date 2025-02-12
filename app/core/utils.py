@@ -30,7 +30,7 @@ class Utils:
         random_string = secrets.token_urlsafe(bytes)
         return random_string
     
-    def create_access_token(self,user_data:dict, expiry:timedelta, refresh:bool = False) -> str:
+    def create_access_token(self,user_data:dict, expiry:timedelta = None, refresh:bool = False) -> str:
         payload = {}
         payload["user"] = user_data
         payload["exp"] = datetime.now() + (expiry if expiry is not None else timedelta(seconds=ACCESS_TOKEN_EXPIRY))
