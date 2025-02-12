@@ -13,3 +13,10 @@ pip install -r requirements.txt
 
 ## migration
 alembic upgrade head
+
+## Fastapi standard installation
+pip install fastapi[standard]
+
+## Run server
+fastapi dev app/main.py
+

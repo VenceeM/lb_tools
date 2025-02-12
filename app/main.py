@@ -8,7 +8,13 @@ from contextlib import asynccontextmanager;
 async def life_span():
     pass
 
+version = "v1"
 
-app = FastAPI()
+app = FastAPI(
+    title="Lb Tools",
+    description="Simple tools",
+    version=version
+)
 
-app.include_router(role_routes,prefix="/roles", tags=["Roles"])
+
+app.include_router(role_routes,prefix=f"/api/{version}/roles", tags=["Roles"])
