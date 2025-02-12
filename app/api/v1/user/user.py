@@ -23,3 +23,19 @@ async def create_user(user_data:CreateUser,session:AsyncSession = Depends(get_se
     )
     
     return new_user
+
+@user_routes.patch("/",response_model=UserModel)
+async def update_user(uid:str,update_user:UpdateUser,session:AsyncSession = Depends(get_session)):
+    
+    user = await user_service.update(
+        uid=uid,
+        user_data=update_user,
+        session=session
+    )
+    
+    return user
+     
+    
+# Add deactivate user later.
+    
+        
