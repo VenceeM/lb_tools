@@ -1,0 +1,41 @@
+from app.repositories.users.user import UserRepository
+from sqlmodel.ext.asyncio.session import AsyncSession
+from app.schemas.user.schema import CreateUser,UpdateUser,DeactiveUser
+from fastapi import HTTPException,status
+
+user_repository = UserRepository()
+
+class UserService:
+    
+    async def users(self, session:AsyncSession):
+        users = await user_repository.get_users(session=session)
+        
+        return users
+    
+    async def user(self,uid:str ,session:AsyncSession):
+        user = await user_repository.get_user(uid=uid,session=session)
+        
+        if user is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User not found"
+            )
+        
+        return user
+    
+    async def create(self,user_data:CreateUser,session:AsyncSession):
+        email = user_data.email.lower()
+        user = await user_repository.get_user_by_email(email=email,session=session)
+        
+        if user:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="User is already exist"
+            )
+
+        new_user = await user_repository.create_user(user_data=user_repository,session=session)
+        
+        return new_user
+    
+    
+    
