@@ -5,13 +5,26 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.schemas.user.schema import CreateUser,UpdateUser,DeactiveUser
 from app.db.db import get_session
 from typing import List
+from fastapi.security import HTTPBearer,HTTPAuthorizationCredentials
+from typing import Annotated
+from app.dependency.dependencies import RoleChecker, AccessTokenBearer
+
 user_routes = APIRouter()
+access_token_bearer = AccessTokenBearer()
+role_checker = Depends(RoleChecker(["admin","user"]))
 
 user_service = UserService()
+security = HTTPBearer(auto_error=True)
 
-@user_routes.get("/",response_model=List[UserModel])
-async def get_users(session:AsyncSession = Depends(get_session)):
+@user_routes.get("/",response_model=List[UserModel],dependencies=[role_checker])
+async def get_users(
+    token_details = Depends(access_token_bearer),
+    session:AsyncSession = Depends(get_session)
+    ):
+    
     users = await user_service.users(session=session)
+    
+    print(token_details)
     
     return users
 

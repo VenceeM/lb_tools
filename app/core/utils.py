@@ -5,6 +5,7 @@ from datetime import datetime,timedelta
 import uuid
 from app.core.config import Config
 import logging
+from app.repositories.roles.roles import RoleRepository
 
 passwd_context = CryptContext(schemes=["bcrypt"])
 
@@ -12,6 +13,8 @@ passwd_context = CryptContext(schemes=["bcrypt"])
 ACCESS_TOKEN_EXPIRY = 3600
 
 class Utils:
+    
+    
     
     def generate_passwd_hash(self,password:str) -> str:
         hash = passwd_context.hash(password)
