@@ -40,7 +40,7 @@ async def refresh_token(token_details = Depends(refresh_token_bearer)):
         detail="Invalid token"
     )
     
-@auth_routes.get("/logout")
+@auth_routes.get("/logout", description="When calling this endpoint it will store the token into the blocklist")
 async def revoke(token_details:dict = Depends(access_token_bearer)):
     jwt_id = token_details["jwt_id"]
     
