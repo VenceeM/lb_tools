@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.api.v1.role.main import role_routes
+from app.api.v1.user.user import user_routes
 from contextlib import asynccontextmanager;
 
 
@@ -16,4 +17,5 @@ app = FastAPI(
 )
 
 
+app.include_router(user_routes,prefix=f"/api/{version}/users", tags=["User"])
 app.include_router(role_routes,prefix=f"/api/{version}/roles", tags=["Roles"])
