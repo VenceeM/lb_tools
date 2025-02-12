@@ -4,6 +4,8 @@ from sqlmodel import select,desc
 from app.models.user.model import UserModel
 from app.core.utils import Utils
 
+utils = Utils()
+
 class UserRepository:
     
     
@@ -33,7 +35,7 @@ class UserRepository:
         user_data_dict = user_data.model_dump()
         
         new_user = UserModel(**user_data_dict)
-        new_user["hash_password"] = Utils.generate_passwd_hash(user_data_dict["hash_password"])
+        new_user.hash_password = utils.generate_passwd_hash(user_data_dict["hash_password"])
         
         session.add(new_user)
         
