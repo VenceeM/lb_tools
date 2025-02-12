@@ -3,7 +3,6 @@ from app.api.v1.role.main import role_routes
 from contextlib import asynccontextmanager;
 
 
-
 @asynccontextmanager
 async def life_span():
     pass
