@@ -1,6 +1,6 @@
 from app.repositories.roles.roles import RoleRepository
 from sqlmodel.ext.asyncio.session import AsyncSession
-from fastapi import HTTPException,status
+from fastapi import HTTPException,status,Depends
 from app.schemas.role.role import RoleSchema,UpdateRoleSchema
 from fastapi.responses import JSONResponse
 
