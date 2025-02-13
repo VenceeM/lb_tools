@@ -12,6 +12,13 @@ role_checker = Depends(RoleChecker(["admin","user"]))
 @extract_route.get("/", dependencies=[role_checker])
 async def extract_weekly_data(to:str,subject:str,body:str,session:AsyncSession = Depends(get_other_engine_session), token_details = Depends(access_token_bearer)):
     result = await helper.extract(recipient_email=to,subject=subject,body=body,session=session)
+    
+    if result is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Something went wrong"
+        )
+    
     return result
     
 # @extract_route.post("/", dependencies=[role_checker])
