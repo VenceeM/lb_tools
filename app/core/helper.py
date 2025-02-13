@@ -29,7 +29,7 @@ class Helper:
         except OSError as e:
             print(str(e))
 
-    async def extract(self,recipient_email:str,subject:str,body:str,session:AsyncSession):
+    async def extract(self,recipient_email:str,subject:str,body:str,session:AsyncSession) -> dict | None:
         
         try:
 
@@ -65,6 +65,10 @@ class Helper:
                 subject=subject,
                 body=body
             )
+            
+            return {
+                "success": "Success"
+            }
         except HTTPException as e:
             raise e
         except Exception as e:
