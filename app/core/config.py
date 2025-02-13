@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     SMTP_PORT:str
     SENDER_EMAIL:str
     SENDER_PASSWORD:str
-    LB_DB_URL:str
+    OTHER_DB_URL:str
     model_config = SettingsConfigDict(
         env_file=".env",
         extra="ignore"

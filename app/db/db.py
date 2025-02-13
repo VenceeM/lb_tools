@@ -10,7 +10,7 @@ engine = create_async_engine(
     )
 
 other_engine = create_async_engine(
-    url=Config.LB_DB_URL,
+    url=Config.OTHER_DB_URL,
     echo=True
     )
 
