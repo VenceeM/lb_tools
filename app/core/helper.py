@@ -18,9 +18,22 @@ from app.db.db import get_other_engine_session
 
 class Helper:
     
-    
-    async def extract(self,session:AsyncSession):
+    def delete_old_files(self,directory_path):
         try:
+            files = os.listdir(directory_path)
+            for file in files:
+                file_path = os.path.join(directory_path, file)
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+            return True
+        except OSError as e:
+            print(str(e))
+
+    async def extract(self,recipient_email:str,subject:str,body:str,session:AsyncSession):
+        
+        try:
+
+            os.path
         
             start_date = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d 00:00:00')
             end_date = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d 23:59:59')
@@ -29,6 +42,8 @@ class Helper:
             
             file_name = f"{(datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")}-{(datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")}"
             file_path = f"{cwd}/app/files/{file_name}.xlsx"
+            
+            
         
             statement = text(QUERY)
             
@@ -44,16 +59,25 @@ class Helper:
             data_frame = pd.DataFrame(rows,columns=result.keys())
             data_frame.to_excel(file_path,engine="openpyxl")
             
+            
+            self.send_email(
+                recipient_email=recipient_email,
+                subject=subject,
+                body=body
+            )
         except HTTPException as e:
             raise e
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"{str(e)}")
+
+           
         
         
     def send_email(self,recipient_email:str,subject:str,body:str):
         cwd = os.getcwd()
         file_name = f"{(datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")}-{(datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")}"
         file_path = f"{cwd}/app/files/{file_name}.xlsx"
+        directory = f"{cwd}/app/files"
         
         msg = MIMEMultipart()
         msg["From"] = Config.SENDER_EMAIL
@@ -82,3 +106,6 @@ class Helper:
             server.quit()
         except Exception as e:
             print(e)
+            
+        finally:
+            self.delete_old_files(directory_path=directory)
