@@ -43,8 +43,6 @@ class Helper:
             file_name = f"{(datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")}-{(datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")}"
             file_path = f"{cwd}/app/files/{file_name}.xlsx"
             
-            
-        
             statement = text(QUERY)
             
             result = await session.exec(statement=statement,params=[{"start_date":start_date,"end_date":end_date}])

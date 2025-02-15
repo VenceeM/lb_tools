@@ -12,6 +12,10 @@ class Settings(BaseSettings):
     SENDER_EMAIL:str
     SENDER_PASSWORD:str
     OTHER_DB_URL:str
+    OTHER_HOST:str
+    OTHER_PORT:str
+    OTHER_USER:str
+    OTHER_PASSWORD:str
     model_config = SettingsConfigDict(
         env_file=".env",
         extra="ignore"
