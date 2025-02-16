@@ -6,20 +6,26 @@ from app.api.v1.extract.extract import extract_route
 from contextlib import asynccontextmanager;
 from app.core.helper import Helper
 from app.api.v1.search.search import search_routes
-import asyncio
+import os
 
 helper = Helper()
 
 @asynccontextmanager
 async def life_span(app:FastAPI):
+    if not os.path.exists(f"{os.getcwd()}/tmp/temp_index"):
+        
+        os.makedirs(f"{os.getcwd()}/tmp/temp_index")
+    
     yield
+    
 
 version = "v1"
 
 app = FastAPI(
     title="Lb Tools",
     description="Simple tools",
-    version=version
+    version=version,
+    lifespan=life_span
 )
 
 
