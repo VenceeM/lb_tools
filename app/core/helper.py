@@ -32,8 +32,6 @@ class Helper:
     async def extract(self,recipient_email:str,subject:str,body:str,session:AsyncSession) -> dict | None:
         
         try:
-
-            os.path
         
             start_date = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d 00:00:00')
             end_date = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d 23:59:59')

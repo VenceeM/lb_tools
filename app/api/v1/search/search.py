@@ -15,7 +15,6 @@ async def search(query:str = Query(... , title="Searching"), field_names: str = 
 
 @search_routes.post("/initialize")
 async def initialize_engine(data: List[dict]):
-    print(data)
     return await search_service.init_data(data)
 
 @search_routes.patch("/")

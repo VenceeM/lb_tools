@@ -35,7 +35,7 @@ class SearchService:
                 self.schema_builder.add_text_field(f"{key}",stored=True,tokenizer_name="en_stem")
             
             self.schema = self.schema_builder.build()
-            self.index = tantivy.Index(schema=self.schema,path=dir)
+            self.index = tantivy.Index(schema=self.schema,path=self.dir)
                     
             writer = self.index.writer()
             
