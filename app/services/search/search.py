@@ -35,7 +35,7 @@ class SearchService:
                 self.schema_builder.add_text_field(f"{key}",stored=True,tokenizer_name="en_stem")
             
             self.schema = self.schema_builder.build()
-            self.index = tantivy.Index(schema=self.schema,path=f"{os.getcwd()}/tmp/temp_index")
+            self.index = tantivy.Index(schema=self.schema,path=dir)
                     
             writer = self.index.writer()
             
@@ -68,15 +68,13 @@ class SearchService:
         if self.index is None:
             return False
         
-    async def search(self,q:str,field_names:list[str]):
+    async def search(self,query:str,field_names:list[str]):
         
-        # if self.index is None:
-        #     return {"result":"No records"}
       
         if "" in field_names:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Please input a field names eg: (lastname name id) separate the field name with comma"
+                detail="Please input a field names eg: (lastname name id)."
             )
         
         if not self.checker():
@@ -84,14 +82,13 @@ class SearchService:
         
         self.index.reload()
         searcher = self.index.searcher()
-        query = self.index.parse_query(q,field_names)
-        result = searcher.search(query,100)
+        parse_query = self.index.parse_query(query,field_names)
+        result = searcher.search(parse_query,100)
         
         hits = []
         default = []
         
-        # Check if the user type any 
-        if q:
+        if query:
             for score, doc_address in result.hits:
                 doc = searcher.doc(doc_address=doc_address)
                 
