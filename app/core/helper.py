@@ -49,7 +49,6 @@ class Helper:
                 )
                 
             
-        
             start_date = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d 00:00:00')
             end_date = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d 23:59:59')
 

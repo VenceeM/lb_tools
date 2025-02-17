@@ -27,26 +27,6 @@ async def extract_weekly_data(file:UploadFile,to:Annotated[str, Body()],subject:
     return result
 
 
-@extract_route.post("/test_upload")
-async def test_uplaod(request = Body(None)):
-   
-    
-    if not request:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Something went wrong"
-        )
-    
-    name = request["name"]
-    
-    if not name:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Something went wrong"
-        )
-    return request["name"]
-
-    
 # @extract_route.post("/", dependencies=[role_checker])
 # async def send_extraction(to:str,subject:str,body:str,token_details = Depends(access_token_bearer)):
 #     return helper.send_email(recipient_email=to,subject=subject,body=body)
