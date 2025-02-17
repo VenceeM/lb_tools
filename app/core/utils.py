@@ -14,8 +14,6 @@ ACCESS_TOKEN_EXPIRY = 3600
 
 class Utils:
     
-    
-    
     def generate_passwd_hash(self,password:str) -> str:
         hash = passwd_context.hash(password)
         return hash
@@ -32,6 +30,7 @@ class Utils:
     def random_secret_generator(self, bytes:int = 16) -> str:
         random_string = secrets.token_urlsafe(bytes)
         return random_string
+    
     
     def create_access_token(self,user_data:dict, expiry:timedelta = None, refresh:bool = False) -> str:
         payload = {}
