@@ -59,3 +59,15 @@ async def get_other_engine_session():
     async with Session() as session:
         yield session
         
+async def get_other_engine() -> AsyncSession:
+    
+    Session = sessionmaker(
+    bind=other_engine,
+    class_=AsyncSession,
+    expire_on_commit= False
+    )
+    
+    async with Session() as session:
+        sessions = session
+        
+    return sessions

@@ -15,12 +15,11 @@ from datetime import datetime, timedelta
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import text
 from fastapi import status,Depends,HTTPException
-from app.db.db import get_other_engine_session
+from app.db.db import get_other_engine_session,get_other_engine
 from fastapi import UploadFile
 import re
 
 class Helper:
-    
     def delete_old_files(self,directory_path):
         try:
             files = os.listdir(directory_path)
@@ -36,10 +35,10 @@ class Helper:
         with open(file_path,"r",encoding="utf-8") as file:
             return file.read()
 
-    async def extract(self,recipient_email:str,subject:str,body:str,session:AsyncSession,file:UploadFile) -> dict | None:
-        
+    async def extract(self,recipient_email:str,subject:str,body:str,uploaded_file:bytes) -> dict | None:
+        sessions = await get_other_engine()
         try:
-            uploaded_file = await file.read()
+            # uploaded_file = await file.read()
             query = uploaded_file.decode("utf-8")
             
             if  re.match(r"^\s*(DELETE\s+FROM)",query, re.IGNORECASE):
@@ -59,7 +58,7 @@ class Helper:
             
             statement = text(query)
             
-            result = await session.exec(statement=statement,params=[{"start_date":start_date,"end_date":end_date}])
+            result = await sessions.exec(statement=statement,params=[{"start_date":start_date,"end_date":end_date}])
             rows = result.fetchall()
             
             if not rows:
