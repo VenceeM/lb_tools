@@ -16,9 +16,6 @@ helper = Helper()
 async def life_span(app:FastAPI):
     if not os.path.exists(f"{os.getcwd()}/tmp/temp_index"):
         os.makedirs(f"{os.getcwd()}/tmp/temp_index")
-        
-    if not os.path.exists(f"{os.getcwd()}/app/files"):
-        os.makedirs(f"{os.getcwd()}/app/files")
     
     await seeder()
     yield

@@ -38,6 +38,9 @@ class Helper:
     async def extract(self,recipient_email:str,subject:str,body:str,uploaded_file:bytes) -> dict | None:
         sessions = await get_other_engine()
         try:
+            if not os.path.exists(f"{os.getcwd()}/app/files"):
+                os.makedirs(f"{os.getcwd()}/app/files")
+            
             # uploaded_file = await file.read()
             query = uploaded_file.decode("utf-8")
             
