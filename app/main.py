@@ -7,6 +7,7 @@ from contextlib import asynccontextmanager;
 from app.core.helper import Helper
 from app.api.v1.search.search import search_routes
 from app.core.config import Config
+from app.db.db import seeder
 import os
 
 helper = Helper()
@@ -17,6 +18,7 @@ async def life_span(app:FastAPI):
         
         os.makedirs(f"{os.getcwd()}/tmp/temp_index")
     
+    await seeder()
     yield
     
 
