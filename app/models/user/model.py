@@ -15,7 +15,7 @@ class UserModel(SQLModel, table=True):
             default=uuid.uuid4
         )
     )
-    role_uid : Optional[uuid.UUID] = Field(default="4f16863a-8932-46ba-9cb5-2bd9ff63bf19",foreign_key="roles.uid")
+    role_uid : Optional[uuid.UUID] = Field(default="f8e2134d-f6df-4d9c-80e1-0df0a6c3638b",foreign_key="roles.uid")
     first_name : str
     last_name : str
     email: str = Field(unique=True,nullable=False)
