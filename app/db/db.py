@@ -28,10 +28,6 @@ async def init_db() -> None:
         await conn.run_sync(SQLModel.metadata.create_all)
         
 
-# index = tantivy.Index(schema=schema)
-# writer = index.writer()
-
-
 async def get_session():
     Session = sessionmaker(
         bind=engine,

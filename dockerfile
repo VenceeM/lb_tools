@@ -7,6 +7,9 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-EXPOSE 8080
+RUN pip install --no-cache-dir gunicorn
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+EXPOSE 8000
+
+# CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD [ "gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-w", "4", "-b", "0.0.0.0:8000", "app.main:app" ]
