@@ -17,7 +17,7 @@ app = Celery(
 )
 helper = Helper()
 
-@app.task(name="worder")
+@app.task(name="worker",track_started = True)
 def extract(recipient_email:str,subject:str,body:str,uploaded_file:bytes,):
     
     try:
