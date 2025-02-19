@@ -7,7 +7,7 @@ from typing import Annotated
 import asyncio
 from celery import Celery
 from app.core.config import Config
-from app.core.worker import extract, get_extract
+from app.core.worker import extract, get_extract,get_tasks
 
 extract_route = APIRouter()
 helper = Helper()
@@ -17,7 +17,7 @@ role_checker = Depends(RoleChecker(["admin","user"]))
 
 
 
-@extract_route.post("/", dependencies=[role_checker])
+@extract_route.post("/",)
 async def extract_weekly_data(file:UploadFile,to:Annotated[str, Body()],subject:Annotated[str, Body()],body:Annotated[str,Body()],session:AsyncSession = Depends(get_other_engine_session), token_details = Depends(access_token_bearer)):
     
     file_bytes = await file.read()
@@ -39,6 +39,12 @@ async def extract_weekly_data(file:UploadFile,to:Annotated[str, Body()],subject:
 @extract_route.get("/")
 async def get_extracted(id:str):
     result = await get_extract(id)
+    return result
+
+@extract_route.get("/tasks")
+async def tasks():
+    result = await get_tasks()
+    
     return result
 
 

@@ -21,10 +21,12 @@ helper = Helper()
 def extract(recipient_email:str,subject:str,body:str,uploaded_file:bytes,):
     
     try:
+        reserve = app.control.inspect().reserved() or None
         
         result =  asyncio.run(
             helper.extract(recipient_email=recipient_email,subject=subject,body=body,uploaded_file=uploaded_file)
         )
+            
        
         return result
     except HTTPException as e :
@@ -35,7 +37,18 @@ def extract(recipient_email:str,subject:str,body:str,uploaded_file:bytes,):
 async def get_extract(id:str):
     task = AsyncResult(id)
     active = app.control.inspect().active()
-    
-    
-    
+
     return task.state
+
+async def get_tasks():
+    inspect = app.control.inspect()
+    
+    active_tasks = inspect.active() or {}
+    reserved_tasks = inspect.reserved() or {}
+    scheduled_tasks = inspect.scheduled() or {}
+    
+    return {
+        "active": active_tasks,
+        "reserved": reserved_tasks,
+        "scheduled": scheduled_tasks
+    }
