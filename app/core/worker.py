@@ -17,7 +17,7 @@ app = Celery(
 )
 helper = Helper()
 
-@app.task(name="worder", queue="extract")
+@app.task(name="worder")
 def extract(recipient_email:str,subject:str,body:str,uploaded_file:bytes,):
     
     try:
@@ -34,4 +34,8 @@ def extract(recipient_email:str,subject:str,body:str,uploaded_file:bytes,):
     
 async def get_extract(id:str):
     task = AsyncResult(id)
+    active = app.control.inspect().active()
+    
+    
+    
     return task.state

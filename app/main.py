@@ -25,13 +25,12 @@ version = "v1"
 
 app = FastAPI(
    
-    title="Lb Tools",
-    description="Simple tools",
+    title="Simple Tools",
+    description="Playground",
     version=version,
     lifespan=life_span,
     docs_url="/mrdocs"
 )
-
 
 
 

@@ -31,7 +31,10 @@ async def extract_weekly_data(file:UploadFile,to:Annotated[str, Body()],subject:
             detail="Something went wrong"
         )
     
-    return result.id
+    return {
+        "message":"Processing in background...",
+        "task":result.id
+    }
 
 @extract_route.get("/")
 async def get_extracted(id:str):
