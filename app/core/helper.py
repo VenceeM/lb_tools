@@ -36,67 +36,70 @@ class Helper:
             return file.read()
 
     async def extract(self,recipient_email:str,subject:str,body:str,uploaded_file:bytes) -> dict | None:
-        sessions = await get_other_engine()
-        try:
-            if not os.path.exists(f"{os.getcwd()}/app/files"):
-                os.makedirs(f"{os.getcwd()}/app/files")
+        
+        
+        async with await get_other_engine() as sessions:
             
-            # uploaded_file = await file.read()
-            query = uploaded_file.decode("utf-8")
-            
-            if  re.match(r"^\s*(DELETE\s+FROM)",query, re.IGNORECASE):
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="Deletion of data is not permitted"
+            try:
+                if not os.path.exists(f"{os.getcwd()}/app/files"):
+                    os.makedirs(f"{os.getcwd()}/app/files")
+                
+                # uploaded_file = await file.read()
+                query = uploaded_file.decode("utf-8")
+                
+                if  re.match(r"^\s*(DELETE\s+FROM)",query, re.IGNORECASE):
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail="Deletion of data is not permitted"
+                    )
+                    
+                
+                start_date = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d 00:00:00')
+                end_date = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d 23:59:59')
+
+                cwd = os.getcwd()
+                
+                file_name = f"{(datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")}-{(datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")}"
+                file_path = f"{cwd}/app/files/{file_name}.xlsx"
+                
+                statement = text(query)
+                
+                result = await sessions.exec(statement=statement,params=[{"start_date":start_date,"end_date":end_date}])
+                rows = result.fetchall()
+                
+                if not rows:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail="No Data"
+                    )
+                
+                # data_frame = pd.DataFrame(rows,columns=result.keys())
+                # data_frame.to_excel(file_path,engine="openpyxl")
+                
+                await asyncio.to_thread(
+                    self.save_to_excel,
+                    rows,
+                    result.keys(),
+                    file_path
                 )
                 
-            
-            start_date = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d 00:00:00')
-            end_date = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d 23:59:59')
-
-            cwd = os.getcwd()
-            
-            file_name = f"{(datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")}-{(datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")}"
-            file_path = f"{cwd}/app/files/{file_name}.xlsx"
-            
-            statement = text(query)
-            
-            result = await sessions.exec(statement=statement,params=[{"start_date":start_date,"end_date":end_date}])
-            rows = result.fetchall()
-            
-            if not rows:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="No Data"
+                
+                asyncio.create_task(
+                    self.send_email(
+                    recipient_email=recipient_email,
+                    subject=subject,
+                    body=body
+                    )
                 )
-            
-            # data_frame = pd.DataFrame(rows,columns=result.keys())
-            # data_frame.to_excel(file_path,engine="openpyxl")
-            
-            await asyncio.to_thread(
-                self.save_to_excel,
-                rows,
-                result.keys(),
-                file_path
-            )
-            
-            
-            asyncio.create_task(
-                self.send_email(
-                recipient_email=recipient_email,
-                subject=subject,
-                body=body
-                )
-            )
-            
-            
-            return {
-                "success": "Success"
-            }
-        except HTTPException as e:
-            raise e
-        except Exception as e:
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"{str(e)}")
+                
+                
+                return {
+                    "success": "Success"
+                }
+            except HTTPException as e:
+                raise e
+            except Exception as e:
+                raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"{str(e)}")
 
     def save_to_excel(self,rows,columns,file_path):
         data_frame = pd.DataFrame(rows,columns=columns)
