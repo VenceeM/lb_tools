@@ -14,8 +14,12 @@ helper = Helper()
 
 @asynccontextmanager
 async def life_span(app:FastAPI):
-    if not os.path.exists(f"{os.getcwd()}/tmp/temp_index"):
+    
+    if os.path.exists(f"{os.getcwd()}/tmp/temp_index"):
+        os.rmdir(f"{os.getcwd()}/tmp/temp_index")
+    else:
         os.makedirs(f"{os.getcwd()}/tmp/temp_index")
+        
     
     await seeder()
     yield
