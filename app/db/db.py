@@ -12,7 +12,7 @@ import tantivy
 from pydantic import BaseModel
 from pymysqlreplication import BinLogStreamReader
 from app.schemas.tantivy.schema import schema
-from app.db.seeders.roles import seed
+from contextlib import asynccontextmanager;
 
 engine = create_async_engine(    
     url=Config.DATABASE_HOST,
@@ -27,16 +27,6 @@ other_engine = create_async_engine(
 async def init_db() -> None:
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
-        
-async def seeder():
-    Session = sessionmaker(
-        bind=engine,
-        class_= AsyncSession,
-        expire_on_commit= False
-    )
-    
-    async with Session() as session:
-        await seed(session=session)
         
 
 async def get_session():
@@ -70,4 +60,16 @@ async def get_other_engine() -> AsyncSession:
     async with Session() as session:
         sessions = session
         
+    return sessions
+
+async def get_sessions() -> AsyncSession:
+    Session = sessionmaker(
+        bind=engine,
+        class_= AsyncSession,
+        expire_on_commit= False
+    )
+    
+    async with Session() as session:
+       sessions = session
+       
     return sessions

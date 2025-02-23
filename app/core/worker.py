@@ -6,6 +6,7 @@ from app.db.db import get_other_engine_session,get_other_engine
 from asyncio import get_event_loop
 from fastapi import HTTPException
 import asyncio
+from app.db.seeders.roles import seed
 from celery.result import AsyncResult
 
 
@@ -17,7 +18,8 @@ app = Celery(
 )
 helper = Helper()
 
-@app.task(name="worker",track_started = True)
+
+@app.task(track_started = True)
 def extract(recipient_email:str,subject:str,body:str,uploaded_file:bytes,):
     
     try:

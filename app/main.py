@@ -7,21 +7,18 @@ from contextlib import asynccontextmanager;
 from app.core.helper import Helper
 from app.api.v1.search.search import search_routes
 from app.core.config import Config
-from app.db.db import seeder
 import os
-
+import asyncio
 helper = Helper()
 
 @asynccontextmanager
 async def life_span(app:FastAPI):
     
-    if os.path.exists(f"{os.getcwd()}/tmp/temp_index"):
-        os.rmdir(f"{os.getcwd()}/tmp/temp_index")
-    else:
-        os.makedirs(f"{os.getcwd()}/tmp/temp_index")
-        
-    
-    await seeder()
+    # if os.path.exists(f"{os.getcwd()}/tmp/temp_index"):
+    #     os.rmdir(f"{os.getcwd()}/tmp/temp_index")
+    # else:
+    #     os.makedirs(f"{os.getcwd()}/tmp/temp_index")
+
     yield
     
 
@@ -42,5 +39,7 @@ app = FastAPI(
 app.include_router(auth_routes,prefix=f"/api/{version}/auth",tags=["Authentication"])
 app.include_router(user_routes,prefix=f"/api/{version}/users", tags=["User"])
 app.include_router(role_routes,prefix=f"/api/{version}/roles", tags=["Roles"])
-app.include_router(extract_route,prefix=f"/api/{version}/extraction", tags=["Extraction"])
+app.include_router(extract_route,prefix=f"/api/{version}/extraction", tags=["Extractions Beta"])
 app.include_router(search_routes,prefix=f"/api/{version}/search", tags=["Search"])
+
+    

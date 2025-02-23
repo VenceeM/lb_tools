@@ -30,9 +30,10 @@ class UserRepository:
         
         return result.first()
     
-    async def create_user(self,user_data : CreateUser, session:AsyncSession):
+    async def create_user(self,user_data : CreateUser, role_uid:str ,session:AsyncSession):
         
         user_data_dict = user_data.model_dump()
+        user_data_dict["role_uid"] = role_uid
         
         new_user = UserModel(**user_data_dict)
         new_user.hash_password = utils.generate_passwd_hash(user_data_dict["hash_password"])

@@ -2,8 +2,10 @@ from app.repositories.users.user import UserRepository
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.schemas.user.schema import CreateUser,UpdateUser,DeactiveUser
 from fastapi import HTTPException,status
+from app.repositories.roles.roles import RoleRepository
 
 user_repository = UserRepository()
+role_repository = RoleRepository()
 
 class UserService:
    
@@ -34,8 +36,10 @@ class UserService:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="User is already exist."
             )
-
-        new_user = await user_repository.create_user(user_data=user_data,session=session)
+            
+        role_id = await role_repository.role(title="user", session=session)
+        
+        new_user = await user_repository.create_user(user_data=user_data,role_uid=role_id.uid,session=session)
         
         return new_user
     
