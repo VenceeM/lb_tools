@@ -4,3 +4,7 @@ __pycache__
 env
 tmp
 compose.yaml
+compose.production.yaml
+.env.dev
+.env.prod
+env.prod

@@ -7,7 +7,6 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 from .config import Config
-from .constant import QUERY
 import pandas as pd
 from sqlmodel import create_engine
 import urllib.parse

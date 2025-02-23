@@ -1,0 +1,31 @@
+name: simple-tool
+
+services:
+  backend:
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+    command: bash -c "alembic upgrade head && python3 -m app.db.seeders.roles && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    env_file:
+      - .env.dev
+
+  db:
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 3ma4BxeXq_SOMZajZnT0cdpQ-V8
+      POSTGRES_DB: developmentdb
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d developmentdb" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  pgdata: {}
+
+networks:
+  app_network:
+    driver: bridge

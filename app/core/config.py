@@ -17,8 +17,8 @@ class Settings(BaseSettings):
     OTHER_USER:str
     OTHER_PASSWORD:str
     model_config = SettingsConfigDict(
-        env_file=".env",
-        extra="ignore"
+        env_file=".env.dev",
+        extra="allow"
     )
     
 Config = Settings()

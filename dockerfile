@@ -9,7 +9,5 @@ COPY . .
 
 RUN pip install --no-cache-dir gunicorn
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
 
 EXPOSE 8000

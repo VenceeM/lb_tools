@@ -34,12 +34,12 @@ app = FastAPI(
 )
 
 
-
+ 
 
 app.include_router(auth_routes,prefix=f"/api/{version}/auth",tags=["Authentication"])
 app.include_router(user_routes,prefix=f"/api/{version}/users", tags=["User"])
 app.include_router(role_routes,prefix=f"/api/{version}/roles", tags=["Roles"])
-app.include_router(extract_route,prefix=f"/api/{version}/extraction", tags=["Extractions Beta"])
+app.include_router(extract_route,prefix=f"/api/{version}/extraction", tags=["Extractions"])
 app.include_router(search_routes,prefix=f"/api/{version}/search", tags=["Search"])
 
     
