@@ -1,6 +1,8 @@
 from sqlmodel import create_engine,SQLModel,select,text
 from sqlmodel.ext.asyncio.session import AsyncSession
+from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import AsyncEngine,create_async_engine
+from sqlalchemy.orm import sessionmaker
 from app.core.config import Config
 from sqlalchemy.orm import sessionmaker
 from app.models.roles.model import RoleModel
@@ -56,11 +58,8 @@ async def get_other_engine() -> AsyncSession:
     class_=AsyncSession,
     expire_on_commit= False
     )
-    
-    async with Session() as session:
-        sessions = session
-        
-    return sessions
+
+    return Session()
 
 async def get_sessions() -> AsyncSession:
     Session = sessionmaker(
@@ -70,6 +69,7 @@ async def get_sessions() -> AsyncSession:
     )
     
     async with Session() as session:
+        
        sessions = session
        
     return sessions
