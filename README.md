@@ -7,6 +7,10 @@ python -m venv env or python3 -m venv env
 ### Windows
 `env\Scripts\activate`
 
+## Rename the env.sample to .env
+
+## Change the .env values.
+
 ## Build
 `docker compose -f compose.yaml -f compose.dev.yaml build`
 
