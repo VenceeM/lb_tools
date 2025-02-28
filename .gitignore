@@ -3,7 +3,6 @@ __pycache__
 .__pycache__
 env
 tmp
-compose.yaml
 compose.production.yaml
 .env.dev
 .env.prod

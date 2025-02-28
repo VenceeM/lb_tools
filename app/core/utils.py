@@ -6,13 +6,38 @@ import uuid
 from app.core.config import Config
 import logging
 from app.repositories.roles.roles import RoleRepository
-
+from cryptography.fernet import Fernet
+import base64
+import os
 passwd_context = CryptContext(schemes=["bcrypt"])
 
 
 ACCESS_TOKEN_EXPIRY = 3600
 
 class Utils:
+    
+    def encrypt_data(self,data:str) -> dict:
+        
+         generated_key = Fernet.generate_key()
+         url_key = self.random_secret_generator()
+         
+         fernet = Fernet(generated_key)
+         
+         encrypted_data = fernet.encrypt(data=data.encode())
+         
+         return {
+             "url_key":url_key,
+             "key":generated_key.decode(),
+             "data":encrypted_data.decode()
+         }
+         
+    def decrypt_data(self,key:str,encrypted:str) -> str:
+        fernet = Fernet(key=key)
+        result = fernet.decrypt(encrypted).decode()
+        
+        return result
+         
+        
     
     def generate_passwd_hash(self,password:str) -> str:
         hash = passwd_context.hash(password)

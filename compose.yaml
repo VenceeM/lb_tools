@@ -1,0 +1,60 @@
+name: simple-tool
+
+services:
+  backend:
+    container_name: simple-tool
+    image: simple-tool
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - 8000:8000
+    expose:
+      - 8000
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app_network
+
+  redis:
+    container_name: redis
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
+    expose:
+      - 6379
+    networks:
+      - app_network
+
+  celery:
+    container_name: celery
+    command: [ "celery", "-A", "app.core.worker.app", "worker", "--loglevel=info" ]
+    build: .
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - redis
+      - backend
+    networks:
+      - app_network
+
+  db:
+    container_name: tools
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+volumes:
+  pgdata: {}
+
+networks:
+  app_network:
+    driver: bridge

@@ -17,6 +17,7 @@ from fastapi import status,Depends,HTTPException
 from app.db.db import get_other_engine_session,get_other_engine
 from fastapi import UploadFile,BackgroundTasks
 from typing import List
+from cryptography.fernet import Fernet
 import re
 
 class Helper:

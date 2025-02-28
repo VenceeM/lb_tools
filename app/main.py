@@ -2,6 +2,7 @@ from fastapi import FastAPI,Depends
 from app.api.v1.role.main import role_routes
 from app.api.v1.user.user import user_routes
 from app.api.v1.auth.auth import auth_routes
+from app.api.v1.vault.vault import vault_routes
 from app.api.v1.extract.extract import extract_route
 from contextlib import asynccontextmanager;
 from app.core.helper import Helper
@@ -35,7 +36,7 @@ app = FastAPI(
 
 
  
-
+app.include_router(vault_routes,prefix=f"/api/{version}/vault",tags=["Credentials Vaule"])
 app.include_router(auth_routes,prefix=f"/api/{version}/auth",tags=["Authentication"])
 app.include_router(user_routes,prefix=f"/api/{version}/users", tags=["User"])
 app.include_router(role_routes,prefix=f"/api/{version}/roles", tags=["Roles"])
